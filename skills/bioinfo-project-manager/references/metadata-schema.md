@@ -102,19 +102,19 @@ Notes: Permeabilization time is the single most impactful technical variable in 
 
 ---
 
-## Drug Resistance Experiments (Your TGFβ / Palbociclib design)
+## Drug Resistance Experiments (combination-treatment design)
 
-This schema fits your current experimental design well. Recommended additions to the base schema:
+This schema fits drug-resistance and combination-treatment designs well. Recommended additions to the base schema:
 
 | Column | Description | Example |
 |---|---|---|
 | `resistance_induction_method` | How resistance was established | `chronic_exposure_6mo`, `genetic_CRISPR` |
 | `resistance_passage` | Passage at which resistance was confirmed | `P8` |
 | `drug_concentration_nM` | Concentration if relevant | `100`, `500` |
-| `combination_order` | For combination treatments: which drug was given first | `TGFb_first`, `simultaneous` |
+| `combination_order` | For combination treatments: which drug was given first | `DrugA_first`, `simultaneous` |
 | `viability_pct` | Viability at harvest if measured | `85` |
 
-Notes: The `combination_order` field is important for interpreting combination treatment effects, particularly when TGFβ and Palbociclib are used together — the sequence matters for EMT induction dynamics.
+Notes: The `combination_order` field is important for interpreting combination treatment effects, particularly when two drugs are used together — the sequence can change the response.
 
 ---
 
@@ -122,6 +122,6 @@ Notes: The `combination_order` field is important for interpreting combination t
 
 **Completeness over perfection.** It is better to record a field as `unknown` or `not_measured` than to leave it blank — a blank field is ambiguous, whereas `unknown` is informative.
 
-**Use controlled vocabulary where possible.** For categorical fields like `treatment` and `background`, define the allowed values at the start of the project in `experimental_notes.md` and adhere to them throughout. This prevents `TGFb` and `TGFβ` appearing as distinct groups in downstream analysis.
+**Use controlled vocabulary where possible.** For categorical fields like `treatment` and `background`, define the allowed values at the start of the project in `experimental_notes.md` and adhere to them throughout. This prevents `DrugA` and `Drug-A` appearing as distinct groups in downstream analysis.
 
 **Record the negative control explicitly.** Always include a `-ve` or `control` row for each cell line and background combination, even if it seems obvious. Downstream DE analysis depends on clean contrast definitions.

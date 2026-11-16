@@ -1,0 +1,9 @@
+{
+  "name": "bioinfo-skills",
+  "description": "Claude skills for bioinformatics: single-cell RNA-seq, spatial transcriptomics, cell-type annotation, R package development, Quarto reporting and project scaffolding.",
+  "version": "0.1.0",
+  "author": { "name": "harshameghadri", "url": "https://github.com/harshameghadri" },
+  "repository": "https://github.com/harshameghadri/claude-bioinfo-skills",
+  "license": "Apache-2.0",
+  "keywords": ["bioinformatics", "single-cell", "scrna-seq", "seurat", "spatial-transcriptomics", "quarto", "r"]
+}

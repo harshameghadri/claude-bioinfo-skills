@@ -122,6 +122,6 @@ Notes: The `combination_order` field is important for interpreting combination t
 
 **Completeness over perfection.** It is better to record a field as `unknown` or `not_measured` than to leave it blank — a blank field is ambiguous, whereas `unknown` is informative.
 
-**Use controlled vocabulary where possible.** For categorical fields like `treatment` and `background`, define the allowed values at the start of the project in `experimental_notes.md` and adhere to them throughout. This prevents `TGFb` and `TGFβ` appearing as distinct groups in downstream analysis.
+**Use controlled vocabulary where possible.** For categorical fields like `treatment` and `background`, define the allowed values at the start of the project in `experimental_notes.md` and adhere to them throughout. This prevents `DrugA` and `Drug-A` appearing as distinct groups in downstream analysis.
 
 **Record the negative control explicitly.** Always include a `-ve` or `control` row for each cell line and background combination, even if it seems obvious. Downstream DE analysis depends on clean contrast definitions.

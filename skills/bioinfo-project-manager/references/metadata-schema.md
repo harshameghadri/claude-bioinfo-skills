@@ -102,19 +102,19 @@ Notes: Permeabilization time is the single most impactful technical variable in 
 
 ---
 
-## Drug Resistance Experiments (Your TGFβ / Palbociclib design)
+## Drug Resistance Experiments (combination-treatment design)
 
-This schema fits your current experimental design well. Recommended additions to the base schema:
+This schema fits drug-resistance and combination-treatment designs well. Recommended additions to the base schema:
 
 | Column | Description | Example |
 |---|---|---|
 | `resistance_induction_method` | How resistance was established | `chronic_exposure_6mo`, `genetic_CRISPR` |
 | `resistance_passage` | Passage at which resistance was confirmed | `P8` |
 | `drug_concentration_nM` | Concentration if relevant | `100`, `500` |
-| `combination_order` | For combination treatments: which drug was given first | `TGFb_first`, `simultaneous` |
+| `combination_order` | For combination treatments: which drug was given first | `DrugA_first`, `simultaneous` |
 | `viability_pct` | Viability at harvest if measured | `85` |
 
-Notes: The `combination_order` field is important for interpreting combination treatment effects, particularly when TGFβ and Palbociclib are used together — the sequence matters for EMT induction dynamics.
+Notes: The `combination_order` field is important for interpreting combination treatment effects, particularly when two drugs are used together — the sequence can change the response.
 
 ---
 

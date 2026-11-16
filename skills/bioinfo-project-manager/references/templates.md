@@ -83,10 +83,10 @@ experiment:
     - "{cell_line_1}"
   backgrounds:
     - "{WT}"
-    - "{Palbociclib-Resistant}"
+    - "{DrugB-Resistant}"
   treatments:
     - "{-ve}"
-    - "{TGFβ (72h)}"
+    - "{DrugA (72h)}"
   n_samples: {integer}
   multi_batch: {true/false}
 
@@ -122,7 +122,7 @@ reproducibility:
 
 | Sample ID | Cell Line | Background | Treatment | Platform |
 |---|---|---|---|---|
-| {MDA_WT_Ctrl} | {MDA-MB-231} | {WT} | {-ve} | {10X Flex} |
+| {LineA_WT_Ctrl} | {CellLineA} | {WT} | {-ve} | {10X Flex} |
 | ... | | | | |
 
 ## Technology
@@ -218,20 +218,20 @@ sample_metadata <- readr::read_csv(
 # Adapt to actual groups in the project
 PALETTE_BACKGROUND <- c(
   "WT"                   = "#4E79A7",
-  "Palbociclib-Resistant" = "#F28E2B"
+  "DrugB-Resistant" = "#F28E2B"
 )
 
 PALETTE_TREATMENT <- c(
   "-ve"               = "#BAB0AC",
-  "TGFβ (72h)"        = "#E15759",
-  "Palbociclib (72h)" = "#76B7B2",
-  "TGFβ+Palbociclib"  = "#59A14F",
-  "TGFβ inhibitor"    = "#EDC948"
+  "DrugA (72h)"        = "#E15759",
+  "DrugB (72h)" = "#76B7B2",
+  "DrugA+DrugB"  = "#59A14F",
+  "DrugA inhibitor"    = "#EDC948"
 )
 
 PALETTE_CELL_LINE <- c(
-  "MDA-MB-231" = "#B07AA1",
-  "HCC-1937"   = "#FF9DA7"
+  "CellLineA" = "#B07AA1",
+  "CellLineB"   = "#FF9DA7"
 )
 
 # ── ggplot2 theme ────────────────────────────────────────────
@@ -326,7 +326,7 @@ Example:
 | Alternative | Reason Rejected |
 |---|---|
 | {percent.mt < 20} | {Too permissive; {n} contaminated cells passed in pilot} |
-| {nFeature < 8000} | {Retained likely multiplets in MDA_Resist sample} |
+| {nFeature < 8000} | {Retained likely multiplets in LineA_Resist sample} |
 
 ## Outputs Produced
 
@@ -338,7 +338,7 @@ Example:
 
 ## Open Flags
 
-- [ ] {Flag 1: e.g., MDA_Resist sample has unusually high ambient RNA — revisit after SoupX}
+- [ ] {Flag 1: e.g., LineA_Resist sample has unusually high ambient RNA — revisit after SoupX}
 - [ ] {Flag 2: ...}
 
 ---

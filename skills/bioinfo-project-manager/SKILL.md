@@ -76,16 +76,16 @@ Proceed?         (Y/N)
 
 **If the user provides a file or image:** extract the data, infer columns, and map to the standard schema below. Confirm your interpretation before writing anything.
 
-**If interactive:** prompt for each field. Adapt — not all fields apply to every experiment. Follow the user's naming conventions exactly (e.g. `MDA_WT_Ctrl` style from their existing sheets).
+**If interactive:** prompt for each field. Adapt — not all fields apply to every experiment. Follow the user's naming conventions exactly (e.g. `LineA_WT_Ctrl` style from their existing sheets).
 
 **Standard schema** (modelled on a factorial scRNA-seq experiment):
 
 | Column | Type | Example |
 |---|---|---|
-| `sample_id` | string, unique | `MDA_WT_Ctrl` |
-| `cell_line` | string | `MDA-MB-231` |
-| `background` | categorical | `WT`, `Palbociclib-Resistant` |
-| `treatment` | categorical/string | `TGFβ (72h)`, `-ve` |
+| `sample_id` | string, unique | `LineA_WT_Ctrl` |
+| `cell_line` | string | `CellLineA` |
+| `background` | categorical | `WT`, `DrugB-Resistant` |
+| `treatment` | categorical/string | `DrugA (72h)`, `-ve` |
 | `timepoint` | string (if not embedded in treatment) | `72h` |
 | `platform` | string | `10X Flex`, `Parse` |
 | `n_cells_expected` | integer | `5000` |

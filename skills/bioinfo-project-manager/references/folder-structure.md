@@ -76,7 +76,7 @@
 ### R Objects (inside scripts)
 - Seurat objects: `seu_{descriptor}` — e.g., `seu_raw`, `seu_filtered`, `seu_integrated`
 - When saving to disk: `{project_name}_{phase}_{descriptor}_{YYYY-MM}.rds`
-  - Example: `TGFb_EMT_01_seu_filtered_2024-11.rds`
+  - Example: `ProjectX_01_seu_filtered_2024-11.rds`
 
 ### Figures
 - `fig{nn}_{plot_type}_{descriptor}.pdf` + identical `.png` for quick preview
@@ -118,13 +118,13 @@ Every project's `data/raw/DATA_REGISTRY.md` should follow this structure:
 
 | Sample ID | Platform | Location | Format | Date Received | Notes |
 |---|---|---|---|---|---|
-| MDA_WT_Ctrl | 10X Flex | gs://bucket/project/raw/MDA_WT_Ctrl/ | filtered_feature_bc_matrix | 2024-11-01 | |
+| LineA_WT_Ctrl | 10X Flex | gs://bucket/project/raw/LineA_WT_Ctrl/ | filtered_feature_bc_matrix | 2024-11-01 | |
 
 ## Processed Objects
 
 | Object | Checkpoint | Location | Date Created | Notes |
 |---|---|---|---|---|
-| seu_filtered | 01_qc | gs://bucket/project/objects/01_qc/TGFb_01_seu_filtered_2024-11.rds | 2024-11-10 | nFeat 200-6000, mt<15 |
+| seu_filtered | 01_qc | gs://bucket/project/objects/01_qc/ProjectX_01_seu_filtered_2024-11.rds | 2024-11-10 | nFeat 200-6000, mt<15 |
 
 ## GCS Access
 

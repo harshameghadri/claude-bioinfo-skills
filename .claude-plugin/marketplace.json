@@ -1,0 +1,11 @@
+{
+  "name": "claude-bioinfo-skills",
+  "owner": { "name": "harshameghadri" },
+  "plugins": [
+    {
+      "name": "bioinfo-skills",
+      "source": "./",
+      "description": "Bioinformatics skills: stepwise cluster labelling, Visium HD QC, Quarto reports, R package development, project scaffolding."
+    }
+  ]
+}

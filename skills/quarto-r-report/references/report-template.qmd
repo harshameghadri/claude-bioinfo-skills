@@ -1,0 +1,274 @@
+---
+title: "Spatial QC Report — Visium HD Human Colon Cancer"
+subtitle: "16µm resolution · Preprocessing & Quality Control"
+author: "Your Name"
+date: today
+date-format: "D MMMM YYYY"
+
+format:
+  html:
+    theme: flatly
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    toc-title: "Contents"
+    number-sections: true
+    code-fold: true
+    code-summary: "Show code"
+    code-tools: true
+    embed-resources: true
+    fig-width: 10
+    fig-height: 7
+    fig-dpi: 150
+    df-print: paged
+
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: true
+
+knitr:
+  opts_chunk:
+    comment: "#>"
+---
+
+```{r}
+#| label: setup
+#| cache: false
+
+library(Seurat)
+library(ggplot2)
+library(patchwork)
+library(plotly)
+library(dplyr)
+library(DT)
+library(here)
+
+# Project-wide theme
+theme_spatial <- function(...) {
+  theme_minimal(base_size = 12) +
+    theme(
+      plot.title    = element_text(face = "bold", size = 14),
+      plot.subtitle = element_text(colour = "grey50"),
+      legend.position = "right",
+      ...
+    )
+}
+theme_set(theme_spatial())
+```
+
+## Overview {#sec-overview}
+
+::: {.callout-note}
+## Dataset
+10X Genomics Visium HD Human Colon Cancer dataset at **16µm bin resolution**.
+Raw data downloaded from [10X Genomics](https://www.10xgenomics.com/datasets/visium-hd-cytassist-gene-expression-libraries-of-human-colon-cancer).
+:::
+
+This report documents the quality control and preprocessing steps applied to the
+Visium HD dataset prior to downstream spatial GSEA analysis.
+
+## Data Loading {#sec-load}
+
+```{r}
+#| label: load-data
+#| cache: true
+
+data_dir <- here("data/raw/Visium_HD_Human_Colon_Cancer_binned_outputs/binned_outputs/square_016um")
+
+visium_obj <- Load10X_Spatial(
+  data.dir = data_dir,
+  filename = "filtered_feature_bc_matrix.h5",
+  assay    = "Spatial",
+  image    = Read10X_Image(
+    image.dir  = file.path(data_dir, "spatial"),
+    image.name = "tissue_lowres_image.png"
+  )
+)
+
+cat("Initial dimensions:", ncol(visium_obj), "spots ×", nrow(visium_obj), "genes\n")
+```
+
+## Quality Control {#sec-qc}
+
+### Computing QC Metrics
+
+```{r}
+#| label: compute-qc
+
+visium_obj[["percent.mt"]]   <- PercentageFeatureSet(visium_obj, pattern = "^MT-")
+visium_obj[["percent.ribo"]] <- PercentageFeatureSet(visium_obj, pattern = "^RP[SL]")
+visium_obj[["log10_complexity"]] <- log10(visium_obj$nFeature_Spatial) /
+                                     log10(visium_obj$nCount_Spatial)
+```
+
+### Metric Distributions
+
+```{r}
+#| label: fig-qc-violin
+#| fig-cap: "Distribution of QC metrics across all spots before filtering."
+#| fig-width: 12
+#| fig-height: 5
+
+VlnPlot(
+  visium_obj,
+  features = c("nCount_Spatial", "nFeature_Spatial", "percent.mt"),
+  pt.size  = 0,
+  ncol     = 3
+)
+```
+
+```{r}
+#| label: fig-qc-scatter
+
+df_qc <- data.frame(
+  nCount   = visium_obj$nCount_Spatial,
+  nFeature = visium_obj$nFeature_Spatial,
+  pct_mt   = visium_obj$percent.mt
+)
+
+ggplot(df_qc, aes(x = nCount, y = nFeature, colour = pct_mt)) +
+  geom_point(size = 0.2, alpha = 0.3) +
+  scale_colour_viridis_c(option = "magma", name = "% MT") +
+  scale_x_log10() + scale_y_log10() +
+  labs(title = "UMI vs Genes per spot",
+       subtitle = "Coloured by mitochondrial percentage",
+       x = "nCount (log10)", y = "nFeature (log10)") +
+  theme_spatial()
+```
+
+### Spatial Distribution of QC Metrics
+
+```{r}
+#| label: fig-spatial-qc
+#| fig-cap: "Spatial distribution of key QC metrics across the tissue section."
+#| fig-width: 14
+#| fig-height: 5
+
+SpatialFeaturePlot(
+  visium_obj,
+  features = c("nCount_Spatial", "nFeature_Spatial", "percent.mt"),
+  ncol     = 3
+)
+```
+
+## Filtering {#sec-filter}
+
+```{r}
+#| label: filter-spots
+
+# Threshold selection — based on quantile inspection
+message("nCount quantiles:")
+print(quantile(visium_obj$nCount_Spatial,   probs = c(0.01, 0.05, 0.95, 0.99)))
+message("nFeature quantiles:")
+print(quantile(visium_obj$nFeature_Spatial, probs = c(0.01, 0.05, 0.95, 0.99)))
+message("percent.mt quantiles:")
+print(quantile(visium_obj$percent.mt,       probs = c(0.90, 0.95, 0.99)))
+
+spots_before <- ncol(visium_obj)
+
+# ADJUST THRESHOLDS based on your quantile output
+visium_obj <- subset(
+  visium_obj,
+  subset = nCount_Spatial   >  100   &
+           nCount_Spatial   < 50000  &
+           nFeature_Spatial >  50    &
+           percent.mt       <  25
+)
+
+spots_after <- ncol(visium_obj)
+
+cat(sprintf(
+  "Spots: %d → %d (%.1f%% retained)\n",
+  spots_before, spots_after, spots_after / spots_before * 100
+))
+```
+
+## Normalisation {#sec-normalise}
+
+```{r}
+#| label: sctransform
+#| cache: true
+
+library(future)
+plan("multicore", workers = 4)
+options(future.globals.maxSize = 8000 * 1024^2)
+
+visium_obj <- SCTransform(
+  visium_obj,
+  assay           = "Spatial",
+  vars.to.regress = "percent.mt",
+  verbose         = FALSE,
+  return.only.var.genes = FALSE
+)
+```
+
+## Dimensionality Reduction & Clustering {#sec-dimred}
+
+```{r}
+#| label: dimred
+#| cache: true
+
+visium_obj <- RunPCA(visium_obj, assay = "SCT", verbose = FALSE)
+visium_obj <- FindNeighbors(visium_obj, dims = 1:30, verbose = FALSE)
+visium_obj <- FindClusters(visium_obj, resolution = 0.5, verbose = FALSE)
+visium_obj <- RunUMAP(visium_obj, dims = 1:30, verbose = FALSE)
+```
+
+```{r}
+#| label: fig-umap-clusters
+#| fig-cap: "UMAP embedding coloured by Seurat cluster (interactive)."
+
+p_umap <- DimPlot(visium_obj, reduction = "umap", label = TRUE, pt.size = 0.4) +
+  theme_spatial() +
+  ggtitle("UMAP — Seurat clusters")
+
+ggplotly(p_umap)
+```
+
+```{r}
+#| label: fig-spatial-clusters
+#| fig-cap: "Spatial map of cluster assignments across the tissue section."
+#| fig-width: 8
+#| fig-height: 7
+
+SpatialDimPlot(visium_obj, label = TRUE, label.size = 3)
+```
+
+## Summary {#sec-summary}
+
+```{r}
+#| label: tbl-summary
+
+summary_df <- data.frame(
+  Step              = c("Raw spots", "After QC filtering", "Genes retained",
+                        "Normalisation", "Clusters identified"),
+  Value             = c(
+    spots_before,
+    spots_after,
+    nrow(visium_obj),
+    "SCTransform (percent.mt regressed)",
+    nlevels(Idents(visium_obj))
+  )
+)
+
+datatable(summary_df, rownames = FALSE, options = list(dom = "t"),
+          caption = "Preprocessing summary")
+```
+
+## Save Outputs {#sec-save}
+
+```{r}
+#| label: save
+#| cache: false
+#| eval: false   # set to true to run on render
+
+dir.create(here("data/processed"), recursive = TRUE, showWarnings = FALSE)
+saveRDS(visium_obj, here("data/processed/visium_hd_qc_complete.rds"))
+message("Saved: data/processed/visium_hd_qc_complete.rds")
+```
+
+---
+
+*Report generated with [Quarto](https://quarto.org/) · R `r R.version.string`*

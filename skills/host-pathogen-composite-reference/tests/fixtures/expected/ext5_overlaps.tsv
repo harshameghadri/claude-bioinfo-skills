@@ -1,0 +1,9 @@
+id_a	id_b	name_a	name_b	strand_a	strand_b	same_strand	same_name	exon_overlap_bp_before	exon_overlap_bp_after	span_overlap_bp_after	new_after_extension
+BW1	BW2	BW	BW	+	+	TRUE	TRUE	0	181	181	TRUE
+BW1	GC	BW	GC	+	-	FALSE	FALSE	0	71	71	TRUE
+BW1	GE	BW	GE	+	-	FALSE	FALSE	0	291	291	TRUE
+BW2	GE	BW	GE	+	-	FALSE	FALSE	0	291	291	TRUE
+GA	GB	GA	GB	+	+	TRUE	FALSE	0	101	181	TRUE
+GB	GC	GB	GC	+	-	FALSE	FALSE	11	11	11	FALSE
+GB	GD	GB	GD	+	+	TRUE	FALSE	0	171	171	TRUE
+GC	GD	GC	GD	-	+	FALSE	FALSE	171	421	421	FALSE

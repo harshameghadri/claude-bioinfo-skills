@@ -330,4 +330,3 @@ quarto render
 ## Reference Files
 
 - `references/report-template.qmd` — full copy-paste starter `.qmd` for QC reports
-- `references/chunk-patterns.md` — common chunk patterns for Seurat, ComplexHeatmap, plotly

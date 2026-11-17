@@ -1,0 +1,3 @@
+run_accession	fastq_ftp	fastq_md5	fastq_bytes
+SRR9000005	ftp.sra.ebi.ac.uk/vol1/fastq/SRR900/005/SRR9000005/SRR9000005_1.fastq.gz;ftp.sra.ebi.ac.uk/vol1/fastq/SRR900/005/SRR9000005/SRR9000005_2.fastq.gz	11111111111111111111111111111111	100;200
+SRR9000006			

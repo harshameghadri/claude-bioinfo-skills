@@ -247,4 +247,3 @@ visium_obj <- SCTransform(visium_obj, assay = "Spatial", verbose = FALSE)
 ## Reference Files
 
 - `references/extended-qc-plots.R` — additional diagnostic plots (doublet scoring, ambient RNA)
-- `references/troubleshooting.md` — common Visium HD loading errors and fixes

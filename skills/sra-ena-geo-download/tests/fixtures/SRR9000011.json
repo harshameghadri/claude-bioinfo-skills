@@ -1,0 +1,59 @@
+{
+ "version": "2",
+ "result": [
+  {
+   "bundle": "X",
+   "status": 200,
+   "files": [
+    {
+     "name": "S1_L001_R1_001.fastq.gz",
+     "type": "source",
+     "size": 1000,
+     "md5": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "locations": [
+      {
+       "service": "s3",
+       "link": "https://example.org/S1_L001_R1_001.fastq.gz"
+      }
+     ]
+    },
+    {
+     "name": "S1_L001_R2_001.fastq.gz",
+     "type": "source",
+     "size": 1000,
+     "md5": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "locations": [
+      {
+       "service": "s3",
+       "link": "https://example.org/S1_L001_R2_001.fastq.gz"
+      }
+     ]
+    },
+    {
+     "name": "S1_L002_R1_001.fastq.gz",
+     "type": "source",
+     "size": 1000,
+     "md5": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "locations": [
+      {
+       "service": "s3",
+       "link": "https://example.org/S1_L002_R1_001.fastq.gz"
+      }
+     ]
+    },
+    {
+     "name": "S1_L002_R2_001.fastq.gz",
+     "type": "source",
+     "size": 1000,
+     "md5": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "locations": [
+      {
+       "service": "s3",
+       "link": "https://example.org/S1_L002_R2_001.fastq.gz"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

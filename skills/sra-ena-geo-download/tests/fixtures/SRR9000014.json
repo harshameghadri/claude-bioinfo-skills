@@ -1,0 +1,35 @@
+{
+ "version": "2",
+ "result": [
+  {
+   "bundle": "X",
+   "status": 200,
+   "files": [
+    {
+     "name": "reads_a.fastq.gz",
+     "type": "source",
+     "size": 1000,
+     "md5": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "locations": [
+      {
+       "service": "s3",
+       "link": "https://example.org/reads_a.fastq.gz"
+      }
+     ]
+    },
+    {
+     "name": "reads_b.fastq.gz",
+     "type": "source",
+     "size": 1000,
+     "md5": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "locations": [
+      {
+       "service": "s3",
+       "link": "https://example.org/reads_b.fastq.gz"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

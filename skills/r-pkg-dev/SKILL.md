@@ -348,4 +348,3 @@ setup needed — commit the `.github/` folder.
 ## Reference Files
 
 - `references/function-templates.R` — ready-to-copy templates for common spatial analysis functions
-- `references/package-checklist.md` — pre-GitHub-push quality checklist

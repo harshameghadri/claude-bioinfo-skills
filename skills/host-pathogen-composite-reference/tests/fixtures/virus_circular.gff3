@@ -1,0 +1,11 @@
+##gff-version 3
+##sequence-region CIRC1 1 1000
+CIRC1	RefSeq	gene	900	1100	.	+	.	ID=gene-W1;Name=W1;gene_biotype=protein_coding;locus_tag=C_W1
+CIRC1	RefSeq	mRNA	900	1100	.	+	.	ID=rna-W1;Parent=gene-W1;product=wrap one
+CIRC1	RefSeq	exon	900	1100	.	+	.	ID=exon-W1;Parent=rna-W1
+CIRC1	RefSeq	gene	950	40	.	-	.	ID=gene-W2;Name=W2;gene_biotype=protein_coding;locus_tag=C_W2
+CIRC1	RefSeq	CDS	950	40	.	-	.	ID=cds-W2;Parent=gene-W2;product=wrap two
+CIRC1	RefSeq	gene	1010	1090	.	+	.	ID=gene-W3;Name=W3;gene_biotype=protein_coding;locus_tag=C_W3
+CIRC1	RefSeq	CDS	1010	1090	.	+	.	ID=cds-W3;Parent=gene-W3;product=beyond end
+CIRC1	RefSeq	gene	300	500	.	+	.	ID=gene-N1;Name=N1;gene_biotype=protein_coding;locus_tag=C_N1
+CIRC1	RefSeq	CDS	310	490	.	+	.	ID=cds-N1;Parent=gene-N1;product=normal

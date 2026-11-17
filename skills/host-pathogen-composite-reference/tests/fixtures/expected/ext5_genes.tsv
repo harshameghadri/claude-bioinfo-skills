@@ -1,0 +1,10 @@
+gene_id	gene_name	strand	biotype	ncbi_geneid	source	n_blocks	footprint_start	footprint_end	ext_applied_bp	start_ext	end_ext	footprint_bp_ext	in_star_composite	n_same_strand_overlaps_before	n_same_strand_overlaps_after	same_strand_overlap_ids_after	new_overlap_ids_after_ext	antisense_overlap_ids_after	same_name_other_loci
+GA	GA	+	protein_coding	900001	exon	2	100	400	0	100	400	202	NA	0	1	GB	GB		
+GB	GB	+	protein_coding	900001	CDS	1	520	880	300	220	880	661	NA	0	2	GA;GD	GA;GD	GC	
+GC	GC	-	protein_coding	900001	CDS	1	870	1180	300	870	1480	611	NA	0	0			BW1;GB;GD	
+GD	GD	+	protein_coding	900001	CDS	1	1010	1290	300	710	1290	581	NA	0	1	GB	GB	GC	
+GE	GE	-	protein_coding	900001	gene	1	1500	1600	300	1500	1900	401	NA	0	0			BW1;BW2	
+BW1	BW	+	protein_coding	910001	CDS	1	1710	1790	300	1410	1790	381	NA	0	0			GC;GE	BW2
+BW2	BW	+	protein_coding	920001	CDS	1	1910	1990	300	1610	1990	381	NA	0	0			GE	BW1
+EBER-1	EBER-1	+	misc_RNA	NA	exon	1	2200	2370	0	2200	2370	171	NA	0	0				
+EBER-2	EBER-2	-	misc_RNA	NA	exon	1	2400	2560	0	2400	2560	161	NA	0	0				

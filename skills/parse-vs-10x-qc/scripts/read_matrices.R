@@ -15,6 +15,13 @@ suppressPackageStartupMessages({ library(Matrix); library(data.table) })
   readMM(con)
 }
 
+# fread() reads .gz files only when R.utils is installed; go through a gzfile connection so no extra package is needed.
+.fread_any <- function(path, ...) {
+  if (!grepl("\\.gz$", path)) return(fread(path, ...))
+  con <- gzfile(path, "rt"); on.exit(close(con))
+  fread(text = readLines(con), ...)
+}
+
 .find_file <- function(dir, candidates) {
   hit <- file.path(dir, candidates)[file.exists(file.path(dir, candidates))]
   if (!length(hit)) stop("none of ", paste(candidates, collapse = ", "), " found in ", dir, call. = FALSE)
@@ -35,8 +42,8 @@ suppressPackageStartupMessages({ library(Matrix); library(data.table) })
 read_parse <- function(dir, sample, orientation = c("auto", "cells_x_genes", "genes_x_cells")) {
   orientation <- match.arg(orientation)
   sname <- sample   # keep out of data.table's column scope: Parse metadata may carry its own 'sample' column
-  genes <- fread(.find_file(dir, c("all_genes.csv.gz", "all_genes.csv")))
-  cmeta <- fread(.find_file(dir, c("cell_metadata.csv.gz", "cell_metadata.csv")))
+  genes <- .fread_any(.find_file(dir, c("all_genes.csv.gz", "all_genes.csv")))
+  cmeta <- .fread_any(.find_file(dir, c("cell_metadata.csv.gz", "cell_metadata.csv")))
   for (col in c("gene_id", "gene_name")) if (!col %in% names(genes)) stop("all_genes.csv lacks column ", col, call. = FALSE)
   if (!"bc_wells" %in% names(cmeta)) stop("cell_metadata.csv lacks column bc_wells", call. = FALSE)
   m <- .read_mtx(.find_file(dir, c("count_matrix.mtx.gz", "count_matrix.mtx")))
@@ -61,8 +68,8 @@ read_parse <- function(dir, sample, orientation = c("auto", "cells_x_genes", "ge
 # 10x Genomics matrix directory (Cell Ranger 'filtered_feature_bc_matrix' or 'raw_feature_bc_matrix'):
 #   matrix.mtx(.gz), barcodes.tsv(.gz), features.tsv(.gz) (id, name, type) or genes.tsv (id, name) in older versions.
 read_10x <- function(dir, sample, feature_type = "Gene Expression") {
-  bc <- fread(.find_file(dir, c("barcodes.tsv.gz", "barcodes.tsv")), header = FALSE)
-  ft <- fread(.find_file(dir, c("features.tsv.gz", "genes.tsv.gz", "features.tsv", "genes.tsv")), header = FALSE)
+  bc <- .fread_any(.find_file(dir, c("barcodes.tsv.gz", "barcodes.tsv")), header = FALSE)
+  ft <- .fread_any(.find_file(dir, c("features.tsv.gz", "genes.tsv.gz", "features.tsv", "genes.tsv")), header = FALSE)
   if (ncol(ft) < 2) stop("features/genes file needs at least id and name columns", call. = FALSE)
   setnames(ft, 1:2, c("gene_id", "gene_name"))
   if (ncol(ft) >= 3) setnames(ft, 3, "feature_type") else ft[, feature_type := "Gene Expression"]

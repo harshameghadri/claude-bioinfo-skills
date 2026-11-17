@@ -5,7 +5,20 @@ on:
     branches: [main]
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
-      - run: python3 scripts/validate_skills.py
+      - name: Install tools used by the skill tests
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            aria2 pigz shellcheck poppler-utils fonts-liberation rna-star \
+            r-base-core r-cran-matrix r-cran-data.table r-cran-vgam \
+            r-cran-ggplot2 r-cran-patchwork r-cran-systemfonts r-cran-svglite r-cran-ragg
+      - name: Validate structure, wording and hygiene of every skill
+        run: python3 scripts/validate_skills.py --strict
+      - name: Test the validator itself
+        run: python3 -I tests/test_validator.py
+      - name: Run the offline tests of every skill
+        run: scripts/run_tests.sh

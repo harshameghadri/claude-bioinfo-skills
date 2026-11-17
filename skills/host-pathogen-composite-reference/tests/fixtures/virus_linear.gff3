@@ -1,0 +1,23 @@
+##gff-version 3
+##sequence-region VIR1 1 3000
+VIR1	RefSeq	gene	100	400	.	+	.	ID=gene-A;Dbxref=GeneID:900001;Name=GA;gbkey=Gene;gene=GA;gene_biotype=protein_coding;locus_tag=HHV4_GA
+VIR1	RefSeq	mRNA	100	400	.	+	.	ID=rna-A;Parent=gene-A;Dbxref=Genbank:X1;Name=XM_A;gbkey=mRNA;gene=GA;locus_tag=HHV4_GA;product=protein A
+VIR1	RefSeq	exon	100	200	.	+	.	ID=exon-A-1;Parent=rna-A;gbkey=mRNA;gene=GA;locus_tag=HHV4_GA
+VIR1	RefSeq	exon	300	400	.	+	.	ID=exon-A-2;Parent=rna-A;gbkey=mRNA;gene=GA;locus_tag=HHV4_GA
+VIR1	RefSeq	CDS	120	200	.	+	.	ID=cds-A;Parent=gene-A;Name=P_A;gbkey=CDS;gene=GA;locus_tag=HHV4_GA;product=protein A
+VIR1	RefSeq	CDS	300	380	.	+	.	ID=cds-A;Parent=gene-A;Name=P_A;gbkey=CDS;gene=GA;locus_tag=HHV4_GA;product=protein A
+VIR1	RefSeq	gene	500	900	.	+	.	ID=gene-B;Dbxref=GeneID:900001;Name=GB;gbkey=Gene;gene=GB;gene_biotype=protein_coding;locus_tag=HHV4_GB
+VIR1	RefSeq	CDS	520	880	.	+	.	ID=cds-B;Parent=gene-B;Name=P_B;gbkey=CDS;gene=GB;locus_tag=HHV4_GB;product=protein B
+VIR1	RefSeq	gene	850	1200	.	-	.	ID=gene-C;Dbxref=GeneID:900001;Name=GC;gbkey=Gene;gene=GC;gene_biotype=protein_coding;locus_tag=HHV4_GC
+VIR1	RefSeq	CDS	870	1180	.	-	.	ID=cds-C;Parent=gene-C;Name=P_C;gbkey=CDS;gene=GC;locus_tag=HHV4_GC;product=protein C
+VIR1	RefSeq	gene	1000	1300	.	+	.	ID=gene-D;Dbxref=GeneID:900001;Name=GD;gbkey=Gene;gene=GD;gene_biotype=protein_coding;locus_tag=HHV4_GD
+VIR1	RefSeq	CDS	1010	1290	.	+	.	ID=cds-D;Parent=gene-D;Name=P_D;gbkey=CDS;gene=GD;locus_tag=HHV4_GD;product=protein D
+VIR1	RefSeq	gene	1500	1600	.	-	.	ID=gene-E;Dbxref=GeneID:900001;Name=GE;gbkey=Gene;gene=GE;gene_biotype=protein_coding;locus_tag=HHV4_GE
+VIR1	RefSeq	gene	1700	1800	.	+	.	ID=gene-F1;Dbxref=GeneID:910001;Name=BW;gbkey=Gene;gene=BW;gene_biotype=protein_coding;locus_tag=HHV4_BW1
+VIR1	RefSeq	CDS	1710	1790	.	+	.	ID=cds-F1;Parent=gene-F1;Name=P_F1;gbkey=CDS;gene=BW;locus_tag=HHV4_BW1;product=repeat protein
+VIR1	RefSeq	gene	1900	2000	.	+	.	ID=gene-F2;Dbxref=GeneID:920001;Name=BW;gbkey=Gene;gene=BW;gene_biotype=protein_coding;locus_tag=HHV4_BW2
+VIR1	RefSeq	CDS	1910	1990	.	+	.	ID=cds-F2;Parent=gene-F2;Name=P_F2;gbkey=CDS;gene=BW;locus_tag=HHV4_BW2;product=repeat protein
+VIR1	RefSeq	transcript	2200	2370	.	+	.	ID=rna-E1;gbkey=misc_RNA;product=EBER-1 RNA
+VIR1	RefSeq	exon	2200	2370	.	+	.	ID=exon-E1;Parent=rna-E1;gbkey=misc_RNA;product=EBER-1 RNA
+VIR1	RefSeq	transcript	2400	2560	.	-	.	ID=rna-E2;gbkey=misc_RNA;product=EBER-2 RNA
+VIR1	RefSeq	exon	2400	2560	.	-	.	ID=exon-E2;Parent=rna-E2;gbkey=misc_RNA;product=EBER-2 RNA

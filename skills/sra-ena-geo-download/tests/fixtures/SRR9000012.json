@@ -1,0 +1,23 @@
+{
+ "version": "2",
+ "result": [
+  {
+   "bundle": "X",
+   "status": 200,
+   "files": [
+    {
+     "name": "SRR9000012",
+     "type": "sra",
+     "size": 5000,
+     "md5": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+     "locations": [
+      {
+       "service": "s3",
+       "link": "https://example.org/SRR9000012.sra"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

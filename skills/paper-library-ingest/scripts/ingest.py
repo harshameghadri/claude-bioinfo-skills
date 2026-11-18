@@ -20,7 +20,7 @@ ROOT=os.path.abspath(os.path.expanduser(_root()))
 def die(msg,code=2):
     print(msg,file=sys.stderr); sys.exit(code)
 META=f'{ROOT}/_meta'; ING=f'{META}/ingest'; PARENT=os.path.dirname(ROOT)
-T_HIGH,T_MID,MARGIN=0.22,0.10,0.03      # calibrated on page-1 text (60 papers): folder-exact ~55-60%, top-level group 88-100%. NEVER auto-file: the user approves every item
+T_HIGH,T_MID,MARGIN=0.22,0.10,0.03      # calibrated on one real library (folder-exact ~55-60%, group 88-100%); 93% folder-exact on a 10-folder PubMed benchmark (tests/bench_classifier.py). NEVER auto-file: the user approves every item
 MIN_BYTES=int(os.environ.get('INGEST_MIN_BYTES',20000)); MAX_DEPTH=3
 EXCLUDE_DIRS={'.git','node_modules','Library','__pycache__','_to_delete','.Trash','site','export'}
 STOP=set('the and for with from that this are was were has have not but its into their than then also which these those using use used can may our via over under between within among after before during about such been being each other more most some any all new two one three based study analysis data method methods approach results show shows high large single human mouse cells cell'.split())

@@ -44,6 +44,10 @@ class IngestFlow(unittest.TestCase):
 
     def plan(self): return json.loads((self.lib / "_meta/ingest/plan.json").read_text())
 
+    def test_00_fresh_library_starts_with_a_clean_git_tree(self):
+        st = subprocess.run(["git", "-C", self.tmp / "fresh_check", "status", "--short"], capture_output=True, text=True) if run([SCRIPTS / "init_library.py", "--root", self.tmp / "fresh_check", "--parents", "Methods"], ok=[0]) else None
+        self.assertEqual(st.stdout.strip(), "", st.stdout)
+
     def test_01_help_of_every_script_exits_zero(self):
         for s in ("ingest.py", "catalog.py", "build_html.py", "export_github.py", "init_library.py"):
             r = run([SCRIPTS / s, "--help"]); self.assertEqual(r.returncode, 0, s); self.assertTrue(r.stdout.strip(), s)

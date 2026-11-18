@@ -16,6 +16,7 @@ Skills for bioinformatics: single-cell RNA-seq (Seurat, scverse), spatial transc
 | [`parse-vs-10x-qc`](skills/parse-vs-10x-qc) | Cell QC for Parse Evercode and 10x matrices: orientation-safe readers, MAD floors, beta-binomial mitochondrial test, MALAT1-aware top-gene rule, well-contamination screen, thinning, optional doublets | R |
 | [`paper-figure-export`](skills/paper-figure-export) | Publication figures from ggplot2: size in mm, embedded fonts, Okabe-Ito palette, export manifest, plus a file auditor and a colour-blind palette checker | R, Python (stdlib) |
 | [`dataset-audit`](skills/dataset-audit) | Pre-analysis audit: file completeness and checksums, FASTQ pairing, count-matrix integrity, sample sheets, replicate and confounding checks | Python (stdlib) |
+| [`paper-library-ingest`](skills/paper-library-ingest) | Keep a personal PDF library tidy: find new papers in download folders, propose categories, ask before creating new ones, file with SHA-256 verification, rebuild a catalog and foldable HTML pages, commit to git; can create a new library | Python (stdlib), poppler, git |
 
 ## Install
 

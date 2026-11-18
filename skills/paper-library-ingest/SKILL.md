@@ -15,7 +15,7 @@ The scripts do everything that can be deterministic (scan, hash, dedupe, plan, c
 3. Never invent metadata. Title, first author, year and DOI are heuristics from page 1; correct them from the page text, or leave `Unknown`.
 4. Never hand-edit generated files (`_meta/papers.jsonl`, `_meta/catalog.csv`, `site/`). Corrected metadata goes into `plan.json` before `apply`.
 5. One physical copy per paper. A configured collection (`_meta/ingest/config.json`) wins over topical folders.
-6. The classifier is a suggestion: on page-1 text it picks the exact folder about 55-60% of the time and the right top-level group 88-100% of the time (measured on one real library of 474 papers; not guaranteed elsewhere). Always show the plan to the user.
+6. The classifier is a suggestion. Measured accuracy of the exact folder: 55-60% on one real library of 474 papers with about 40 overlapping folders; 93% (leave-one-out) on a 10-folder library of well-separated topics, falling to 80% with 3 library papers per folder and 57% with 1. Verdict `high` was right 92-100% of the time once folders held 2 or more papers, but when a paper's topic has no folder yet about 1 in 10 still gets a wrong `high`. So the user sees the whole plan, and a paper whose subject no folder name covers is a new-category candidate whatever its verdict.
 7. A scan with no recorded previous run needs `--since YYYY-MM-DD` or `--all`; otherwise it exits 2.
 8. If a command fails with an error you do not understand, stop and report it. Do not retry in a loop or work around it.
 9. Keep any remote repository private: the library may contain copyrighted PDFs and quoted highlights.
@@ -34,7 +34,7 @@ Then `cd` into the library, read its `AGENTS.md` if present, and run `git status
 
 ### 3. Scan
 `python3 tools/ingest.py scan` reads files newer than the last successful run (`_meta/ingest/state.json`).
-- First run or a long gap: add `--since YYYY-MM-DD` or `--all` (slow).
+- First run or a long gap: add `--since YYYY-MM-DD` or `--all` (slow). Use the date the user names; with no date, use `--all` if `detect` showed a few hundred PDFs or fewer, otherwise ask the user for a start date.
 - `--inbox PATH` (repeatable) overrides the default folders.
 - Output `INCOMPLETE: N files not yet read` means the time budget ended: run the same command again until it prints `scan complete`. Results are cached.
 - `found: {}` means nothing new: tell the user and stop.
@@ -46,9 +46,9 @@ Then `cd` into the library, read its `AGENTS.md` if present, and run `git status
 - `skipped[]`: files already in the library (same SHA-256) or duplicated in the batch. Report only their number.
 
 For every item whose action is not `skip`:
-1. Compare the guessed metadata with `page1_text` and correct `title`, `first_author` (surname only), `year`, `venue_abbr` (short, no spaces, for example `NatMethods`, `bioRxiv`), `doi` where the text shows them. Replace obvious garbage (a date line, "arXiv:...", "Running Title"). After correcting, set `"meta_confidence": "high"`.
+1. Compare the guessed metadata with `page1_text` and correct `title`, `first_author` (surname only), `year`, `venue_abbr` (short, no spaces, for example `NatMethods`, `bioRxiv`; if page 1 prints only the full journal name, join its initials or its main words, for example `Journal of Synthetic Examples` becomes `JSynthExamples`; if no journal is printed, `Unknown`), `doi` where the text shows them. Replace obvious garbage (a date line, "arXiv:...", "Running Title"). After correcting, set `"meta_confidence": "high"`.
 2. Check `dest` against `existing_folders`; change it if wrong. A new folder name is `Title_Case_With_Underscores` under an allowed parent.
-3. For "possible duplicate": a preprint and its published version are different records, keep both; the same version twice is `"action": "ignore"`; unsure means leave `ask`.
+3. For "possible duplicate": a preprint and its published version are different records, keep both; the same version twice is `"action": "ignore"`; unsure means leave `ask` and put the question to the user in step 5; do not decide it yourself.
 
 ### 5. GATE: ask the user (one grouped message, then wait for the answers)
 1. For each entry of `new_categories`: "N papers match no existing category: TITLES. Create PARENT/NAME? yes / yes with another name or parent / no, file elsewhere / skip." Never create a category without a yes. Single unmatched papers: file under the closest folder, create a category, or skip?
@@ -67,15 +67,15 @@ Then show the final table (inbox file, destination folder, new file name `Author
 - `git status --short` is empty and `git log --oneline -1` shows the ingest commit.
 - The number of lines in `_meta/papers.jsonl` equals the previous number plus the number filed.
 - Each filed file exists at its destination and `sha256sum` equals `sha` in the plan.
-- Each new category has a page `site/SLUG.html` (`grep -c 'class="paper"' site/SLUG.html`).
+- Each new category has a page `site/SLUG.html`, where SLUG is the folder path in lower case with `/` and `_` replaced by `-` (`Biology/Quantum_Biology` gives `site/biology-quantum-biology.html`); check with `grep -c 'class="paper"' site/SLUG.html`.
 - Move mode: sources are gone or in `_to_delete/`.
 If a check fails, say exactly which one; never report success.
 
 ### 8. Record new categories
-If a category was created, append `- DATE: PATH created for N papers (reason)` to `docs/TAXONOMY.md` (create it if absent), mention the folder in `AGENTS.md`, and run `tools/commit.sh "docs: new category NAME"`.
+If a category was created, read `AGENTS.md`, append `- DATE: PATH created for N papers (reason)` to `docs/TAXONOMY.md` (create it if absent), append the line `- Category PATH: one-line description` to `AGENTS.md`, and run `tools/commit.sh "docs: new category NAME"` (one commit for all categories created in this run, with their names in the message).
 
 ### 9. Report (short)
-Counts scanned, filed, skipped, pending; new categories; where originals went; the commit hash. Remind only if relevant: summaries of new papers are `pending`; pushing to a remote is the user's step; `python3 tools/export_github.py` refreshes a PDF-free export.
+Counts scanned, filed, skipped, pending; new categories; where originals went; the commit hash. Files skipped as already in the library stay where they are even in move mode: list them and offer to delete them, and delete only if the user says yes. Remind only if relevant: summaries of new papers are `pending`; pushing to a remote is the user's step; `python3 tools/export_github.py` refreshes a PDF-free export.
 
 ## Failure table
 | Symptom | Action |
@@ -96,4 +96,4 @@ Per library: `_meta/papers.jsonl` (source of truth, one record per paper, id `p_
 `bash tests/run.sh` (offline, a few seconds) builds a library and synthetic PDFs, then checks: every script's `--help`; usage errors and exit codes; duplicate detection by SHA-256; non-paper skipping; clustering of three similar unmatched papers into one proposed category; dry run writes nothing; unapproved items and unapproved categories are never filed; verified move; reviewed metadata survives the catalog rebuild; the git commit; second scan finds nothing; catalog idempotence and rename detection. It is skipped with a printed reason if poppler is missing.
 
 ## Not verified
-Classifier accuracy outside the library it was measured on. Metadata guesses on real journal layouts (they are heuristics). Browser download-folder detection from Chrome, Firefox and Safari settings (code paths exist; only the standard folders are exercised). Scanned PDFs without text. Libraries above a few thousand PDFs (first scan is slow; it resumes). The optional `export_github.py` mirror is not covered by the tests.
+Classifier accuracy on real PDFs outside the two data sets above (`tests/bench_classifier.py` reproduces the second one; it uses abstracts as page-1 text). Metadata guesses on real journal layouts (they are heuristics). Browser download-folder detection from Chrome, Firefox and Safari settings (code paths exist; only the standard folders are exercised). Scanned PDFs without text. Libraries above a few thousand PDFs (first scan is slow; it resumes). The optional `export_github.py` mirror is not covered by the tests.

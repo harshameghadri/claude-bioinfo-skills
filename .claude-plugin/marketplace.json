@@ -7,7 +7,7 @@
     {
       "name": "bioinfo-skills",
       "source": "./",
-      "description": "Bioinformatics skills: public data download, host-pathogen references, Parse/10x QC, publication figures, dataset audit, cluster labelling, Visium HD QC, Quarto reports, R package development, project scaffolding."
+      "description": "Bioinformatics skills: public data download, host-pathogen references, Parse/10x QC, publication figures, dataset audit, cluster labelling, Visium HD QC, Quarto reports, R package development, project scaffolding, paper library ingest."
     }
   ]
 }

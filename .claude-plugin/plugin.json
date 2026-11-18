@@ -1,7 +1,7 @@
 {
   "name": "bioinfo-skills",
-  "description": "Skills for bioinformatics: single-cell RNA-seq, spatial transcriptomics, public data download, host-pathogen references, Parse/10x QC, publication figures, dataset audit, cell-type annotation, R package development, Quarto reporting and project scaffolding.",
-  "version": "0.2.0",
+  "description": "Skills for bioinformatics: single-cell RNA-seq, spatial transcriptomics, public data download, host-pathogen references, Parse/10x QC, publication figures, dataset audit, cell-type annotation, R package development, Quarto reporting, project scaffolding and paper-library management.",
+  "version": "0.3.0",
   "author": {
     "name": "harshameghadri",
     "url": "https://github.com/harshameghadri"
@@ -24,6 +24,9 @@
     "figures",
     "quarto",
     "r",
-    "python"
+    "python",
+    "pdf",
+    "literature",
+    "reference-management"
   ]
 }
